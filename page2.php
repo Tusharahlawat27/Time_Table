@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        
+        <form action="" method="post">
+            <label for="t_id">Teacher Id(of Absent Teacher):</label>
+            <input type="text" id="t_id" name="t_id" "><br><br>
+            <button type="submit" name="done">Submit</button>
+        </form>
+        <div class="conatiner">
+            <div class="col-lg-12">
+                <h1>free teachers</h1>
+                <table>
+                    <tr>
+                    <th>Teacher Id</th>
+                    <th>Teacher Name</th>
+                    <th>Lecture No</th><!-- comment -->
+                    </tr>
+        <?php
+        if(isset($_POST['done']))
+        { 
+            $t= $_POST['t_id'];
+        $con=mysqli_connect("localhost","root","","tt") or
+        die(mysqli_error($con));
+        $select_query="SELECT * FROM SCHEDUE_TABLE INNER JOIN TECH_TT ON SCHEDUE_TABLE.t_id = TECH_TT.t_id  WHERE SCHEDUE_TABLE.t_id='$t' ";
+        $query=mysqli_query($con,$select_query) or
+        die(mysqli_error($con));
+        while($res= mysqli_fetch_array($query)){
+
+        
+        ?>
+                <tr>
+                    <td><?php echo $res['t_id'];?></td>
+                    <td><?php echo $res['t_name'];?></td>
+                    <td><?php echo $res['lect'];?></td>
+                    <td>
+                    </td>
+                    </tr> 
+                    <?php
+        }}?>
+                </table>
+            </div>
+            <form method="post">
+                <label for="lect">Enter Lecture No:</label>
+            <input type="text" id="lect" name="lect" "><br><br>
+                            <button type="submit" name="d">View Available Teachers</button>
+                        </form>
+            
+            
+            <table>
+                <tr>
+                    <th>Teacher Id</th>
+                    <th>Teacher Name</th>
+                    
+                    </tr>
+        <?php
+        if(isset($_POST['d']))
+        { 
+            $tt= $_POST['lect'];
+            echo $tt;
+        $con=mysqli_connect("localhost","root","","tt") or
+        die(mysqli_error($con));
+        $select_query="SELECT * FROM tech_tt WHERE t_id NOT IN (SELECT tech_tt.t_id FROM tech_tt INNER JOIN schedue_table WHERE tech_tt.t_id=schedue_table.t_id AND schedue_table.lect='$tt')";
+        $query=mysqli_query($con,$select_query) or
+        die(mysqli_error($con));
+        while($res= mysqli_fetch_array($query)){
+
+        
+        ?>
+                <tr>
+                    <td><?php echo $res['t_id'];?></td>
+                    <td><?php echo $res['t_name'];?></td>
+                    
+                    </tr> 
+                    <?php
+        }}?>
+            </table>
+            
+            
+        </div>
+       
+    </body>
+</html>
+
